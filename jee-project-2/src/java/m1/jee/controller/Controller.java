@@ -1,12 +1,17 @@
 package m1.jee.controller;
 
 import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import m1.jee.dao.DBConnection;
 
 @WebServlet(name = "Controller", urlPatterns = {"/"})
 public class Controller extends HttpServlet {
@@ -23,15 +28,15 @@ public class Controller extends HttpServlet {
     HttpSession session = request.getSession();
     String url = request.getServletPath();
     
-    System.out.println(url);
+    DBConnection.getInstance();
     
     switch(url){
       case "/":
         if(session.getAttribute("logged") != null){
-          indexAction(request, response, session);
+          loginAction(request, response, session);
         }
         else{
-          loginAction(request, response, session);
+          indexAction(request, response, session);
         }
         break;
 
@@ -45,7 +50,7 @@ public class Controller extends HttpServlet {
         break;
       
       default:
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        includeFileStream(response, url);
         break;
     }
   }
@@ -61,8 +66,6 @@ public class Controller extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     HttpSession session = request.getSession();
     String url = request.getServletPath();
-    
-    System.out.println(url);
     
     switch(url){
       case "/login":
@@ -93,7 +96,7 @@ public class Controller extends HttpServlet {
         break;
       
       default:
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        includeFileStream(response, url);
         break;
     }
   }
@@ -107,7 +110,7 @@ public class Controller extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   private void indexAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-    
+    request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);  
   }
   
   /**
@@ -119,7 +122,7 @@ public class Controller extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   private void loginAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-    
+    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
   }
   
   /**
@@ -131,7 +134,7 @@ public class Controller extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   private void addAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-    
+    request.getRequestDispatcher("/WEB-INF/views/add.jsp").forward(request, response);
   }
   
   /**
@@ -143,7 +146,7 @@ public class Controller extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   private void deleteAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-    
+    request.getRequestDispatcher("/WEB-INF/views/delete.jsp").forward(request, response);
   }
   
   /**
@@ -155,7 +158,7 @@ public class Controller extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   private void seeAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-    
+    request.getRequestDispatcher("/WEB-INF/views/see.jsp").forward(request, response);
   }
 
   /**
@@ -165,5 +168,26 @@ public class Controller extends HttpServlet {
   @Override
   public String getServletInfo() {
     return "Short description";
+  }
+  
+  /**
+   * Display file stream or return 404
+   * @param response servlet response
+   * @throws IOException if an I/O error occurs
+   */
+  private void includeFileStream(HttpServletResponse response, String url) throws IOException{
+    try{
+      ServletContext context = getServletContext();
+      InputStream is = context.getResourceAsStream("/WEB-INF" + url);
+      OutputStream output = response.getOutputStream();
+      byte[] buffer = new byte[10240];
+
+      for (int length = 0; (length = is.read(buffer)) > 0;) {
+          output.write(buffer, 0, length);
+      }
+    }
+    catch(IOException | NullPointerException e){
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    }
   }
 }
