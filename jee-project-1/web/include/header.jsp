@@ -18,17 +18,13 @@
       <div class="error info"><% out.println(session.getAttribute("info")); %></div>
     <%
       }
-    %>
-    
-    <%
+
       if(session.getAttribute("danger") != null){
     %>
       <div class="error danger"><% out.println(session.getAttribute("danger")); %></div>
     <%
       }
-    %>
-    
-    <%
+
       if(session.getAttribute("success") != null){
     %>
       <div class="error  success"><% out.println(session.getAttribute("success")); %></div>
