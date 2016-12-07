@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+  <context-param>
+    <param-name>username</param-name>
+    <param-value>admin</param-value>
+  </context-param>
+  <context-param>
+    <param-name>password</param-name>
+    <param-value>jee</param-value>
+  </context-param>
+  
+  <servlet>
+    <servlet-name>ControllerClass</servlet-name>
+    <servlet-class>m1.jee.controller.Controller</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>ControllerClass</servlet-name>
+    <url-pattern>/(.*)</url-pattern>
+  </servlet-mapping>
+</web-app>
