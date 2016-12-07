@@ -1,4 +1,4 @@
-<jsp:include page="include/header.jsp" />
+<c:import url="include/header.jsp"></c:import>
 <div class="login">
   <div class="title">
     <h2>Enter your credentials</h2>
@@ -11,4 +11,4 @@
     </form>
   </div>  
 </div>
-<jsp:include page="include/footer.jsp" />
+<c:import url="include/footer.jsp"></c:import>

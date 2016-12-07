@@ -79,8 +79,10 @@
             <input type="text" name="address" value="<% out.println(mem.getAddress()); %>"/><br/>
             <label>Postal code</label>
             <input type="text" name="postalCode" value="<% out.println(mem.getPostalCode()); %>"/><br/>
-            <label>Email</label>
+            <label>City</label>
             <input type="text" name="city" value="<% out.println(mem.getCity()); %>"/><br/><br/>
+            <label>Email</label>
+            <input type="text" name="email" value="<% out.println(mem.getEmail()); %>"/><br/><br/>
   <%
           }
         }
@@ -97,5 +99,7 @@
       session.setAttribute("danger", "Something wrong happened");
     }
   %>
+  <br />
+  <a href="index.jsp">Go back</a>
 </div>
 <%@include file="include/footer.jsp" %>

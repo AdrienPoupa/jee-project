@@ -4,10 +4,10 @@
   <h2>List of members of the Java EE - M1</h2>
   <c:if test="${memberList.size() == 0}">
     <div class="error info">The Club has no member!</div>
-    <a href="/add" class="button">Add new members</a>
+    <a href="addMember.jsp" class="button">Add new members</a>
   </c:if>
     
-  <form method="post" action="/delete" name="formMember">    
+  <form method="post" action="deleteMember.jsp" name="formMember">    
     <table class="table" cellpadding="0">
       <thead>
         <tr>
@@ -20,13 +20,13 @@
       <tbody>
         <c:choose>
           <c:when test="${memberList.size() > 0}">
-            <c:forEach items="${memberList}" var="mem">
+            <c:forEach items="${listMember}" var="mem">
               <tr>
                 <td class="icon">
                    <input type="checkbox" name="member" value="<c:out value="${mem.getId()}"/>"/>
                 </td>
                 <td class=""><c:out value="${mem.getFirstName()}"/></td>
-                <td class=""><c:out value="${mem.getName()}"/></td>
+                <td class=""<c:out value="${mem.getName()}"/></td>
                 <td class=""><c:out value="${mem.getEmail()}"/></td>
               </tr>
             </c:forEach>
@@ -47,12 +47,12 @@
 </div>  
 <script type="text/javascript">
   function detailMember(){
-    document.formMember.action = "/see";
+    document.formMember.action = "detailMember.jsp";
     document.formMember.submit();
   }
   
   function deleteMember(){
-    document.formMember.action = "/delete";
+    document.formMember.action = "deleteMember.jsp";
     document.formMember.submit();
   }
 </script>

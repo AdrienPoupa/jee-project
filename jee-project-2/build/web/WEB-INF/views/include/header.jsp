@@ -13,7 +13,6 @@
         <h1>JEE project M1</h1>
       </a>
     </header>
-    <div class="error info"><c:out value="${logged}"/></div>
     <c:if test="${info != null}">
       <div class="error info"><c:out value="${info}"/></div>
     </c:if>

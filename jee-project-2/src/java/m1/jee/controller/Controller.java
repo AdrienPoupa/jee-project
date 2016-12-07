@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,6 +32,11 @@ public class Controller extends HttpServlet {
     ERRORLIST.put("MSG_ERROR_LOGIN_PWD", "Login failed! Please check your login and/or password and try again");
     ERRORLIST.put("MSG_ERROR_LOGIN", "Login failed! Please try later");
     ERRORLIST.put("MSG_SUCCESS_LOGIN", "You have been successfully logged in!");
+    ERRORLIST.put("MSG_ERROR_WRONG", "Something went wrong");
+    ERRORLIST.put("MSG_SUCCESS_NEW_MEMBER", "New members have been added successfully to the database");
+    ERRORLIST.put("MSG_SUCCESS_DELETE_MEMBER", "Selected members have been deleted successfully from the database");
+    ERRORLIST.put("MSG_ERROR_SELECT_MEMBER", "You must select at least one member");
+    ERRORLIST.put("MSG_ERROR_NO_MEMBER", "No members found");
   }
   
   /**
@@ -93,7 +99,7 @@ public class Controller extends HttpServlet {
         break;
         
       case "/see":
-        if(session.getAttribute("logged") == null){
+        if(session.getAttribute("logged") != null){
           seeAction(request, response, session);
         }
         else{
@@ -102,7 +108,7 @@ public class Controller extends HttpServlet {
         break;
         
       case "/delete":
-        if(session.getAttribute("logged") == null){
+        if(session.getAttribute("logged") != null){
           deleteAction(request, response, session);
         }
         else{
@@ -125,16 +131,35 @@ public class Controller extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   private void indexAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-    Connection db = DBConnection.getConnection(getServletContext());
+    ResultSet data;
     List<BeanMember> memberList = new ArrayList<>();
     
     try{
+      Connection db = DBConnection.getConnection(getServletContext());
+      Statement statement = db.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+      data = statement.executeQuery("SELECT * FROM members");
+
+      while(data.next()){
+        BeanMember member = new BeanMember();
+        member.setId(data.getString("ID"));
+        member.setName(data.getString("NAME"));
+        member.setFirstName(data.getString("FIRSTNAME"));
+        member.setEmail(data.getString("EMAIL"));
+        member.setTelHome(data.getString("TELHOME"));
+        member.setTelMob(data.getString("TELMOB"));
+        member.setTelPro(data.getString("TELPRO"));
+        member.setAddress(data.getString("ADRESS"));
+        member.setPostalCode(data.getString("POSTALCODE"));
+        memberList.add(member);
+      }
       
+      DBDisconnect.disconnect(db);
     }
-    catch(Exception e){
-      
+    catch(SQLException e){
+      session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_WRONG"));
     }
     
+    request.setAttribute("memberList", memberList);
     request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);  
   }
   
@@ -174,7 +199,30 @@ public class Controller extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   private void addAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-    request.getRequestDispatcher("/WEB-INF/views/add.jsp").forward(request, response);
+    try{
+      Connection db = DBConnection.getConnection(getServletContext());
+      
+      String query = "INSERT INTO MEMBERS(NAME, FIRSTNAME, TELHOME, TELMOB, TELPRO, ADRESS, POSTALCODE, CITY,EMAIL) VALUES"
+            + "('Simpson','Homer','0123456789','0612345678','0698765432','2 avenue Duff','92700','Colombes','hsimpson@gmail.com'),"
+            + "('Simpson','Bart','0145362787','0645362718','0611563477','10 rue des Rebelles','92270','Bois-colombes','bsimpson@gmail.com'),"
+            + "('Lagaffe','Gaston','0187665987','0623334256','0654778654','65 rue de la Paresse','92700','Colombes','glagaffe@yahoo.fr'),"
+            + "('Mfalda','Querida','0187611987','0783334256','0658878654','6 rue de Buenos Aires','75016','Paris','qmafalda@hotmail.ar'),"
+            + "('Woodpecker','Woody','0187384987','0622494256','0674178654','5 bvd des Picoreurs','21000','Dijon','woody@mail.co.uk'),"
+            + "('Brown','Charlie','0122456678','0699854673','0623445166','140 avenue Foche','90000','Nanterre','cbrown@live.com')";
+      
+      Statement statement = db.createStatement();
+      statement.execute(query);
+
+      DBDisconnect.disconnect(db);
+      
+      session.setAttribute("success", ERRORLIST.get("MSG_SUCCESS_NEW_MEMBERS"));
+    }
+    catch(SQLException e){
+      session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_WRONG"));
+    }
+    finally{
+      response.sendRedirect("/");
+    }
   }
   
   /**
@@ -186,7 +234,32 @@ public class Controller extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   private void deleteAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-    request.getRequestDispatcher("/WEB-INF/views/delete.jsp").forward(request, response);
+    try{
+      Connection db = DBConnection.getConnection(getServletContext());
+      
+      String select[] = request.getParameterValues("member");
+
+      if (select != null && select.length != 0) {
+        for (String select1 : select) {
+          PreparedStatement statement = db.prepareStatement("DELETE FROM members WHERE ID = ?");
+          statement.setInt(1, Integer.parseInt(select1.trim()));
+          statement.execute();
+        }
+
+        session.setAttribute("success", ERRORLIST.get("MSG_SUCCESS_DELETE_MEMBER"));
+      }
+      else{
+        session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_SELECT_MEMBER"));
+      }
+
+      DBDisconnect.disconnect(db);
+    }
+    catch(SQLException e){
+      session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_WRONG"));
+    }
+    finally{
+      response.sendRedirect("/");
+    }
   }
   
   /**
@@ -198,7 +271,62 @@ public class Controller extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   private void seeAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-    request.getRequestDispatcher("/WEB-INF/views/see.jsp").forward(request, response);
+    try{
+      Connection db = DBConnection.getConnection(getServletContext());
+      
+      String select[] = request.getParameterValues("member");
+      String inQuery = "";  
+      
+      if(select != null && select.length > 0){
+        for (int i = 0; i < select.length; i++) {
+          if(i < select.length -1){
+            inQuery += select[i] + ", ";
+          }
+          else{
+            inQuery += select[i];
+          }
+        }
+        
+        Statement statement = db.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ResultSet data = statement.executeQuery("SELECT * FROM members WHERE ID IN (" + inQuery + ")");
+        
+        List<BeanMember> memberList = new ArrayList<>();
+        
+        while(data.next()){
+          BeanMember member = new BeanMember();
+          member.setName(data.getString("NAME"));
+          member.setFirstName(data.getString("FIRSTNAME"));
+          member.setTelHome(data.getString("TELHOME"));
+          member.setTelMob(data.getString("TELMOB"));
+          member.setTelPro(data.getString("TELPRO"));
+          member.setAddress(data.getString("ADRESS"));
+          member.setPostalCode(data.getString("POSTALCODE"));
+          member.setEmail(data.getString("EMAIL"));
+          member.setPostalCode(data.getString("POSTALCODE"));
+          member.setCity(data.getString("CITY"));
+          memberList.add(member);
+        }
+        
+        if(memberList.size() > 0){
+          request.setAttribute("memberList", memberList);
+          request.getRequestDispatcher("/WEB-INF/views/see.jsp").forward(request, response);
+        }
+        else{
+          session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_NO_MEMBER"));
+          response.sendRedirect("/");
+        }
+      }
+      else{
+        session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_SELECT_MEMBER"));
+        response.sendRedirect("/");
+      }
+
+      DBDisconnect.disconnect(db);
+    }
+    catch(SQLException e){
+      session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_WRONG"));
+      response.sendRedirect("/");
+    }
   }
 
   /**
@@ -207,7 +335,7 @@ public class Controller extends HttpServlet {
    */
   @Override
   public String getServletInfo() {
-    return "Short description";
+    return "Front controller";
   }
   
   /**
