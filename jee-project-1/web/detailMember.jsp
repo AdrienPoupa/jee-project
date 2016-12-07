@@ -1,3 +1,7 @@
+<%@page import="m1.jee.model.BeanMember"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="java.sql.Connection"%>
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.Array"%>
 <%@page import="java.sql.ResultSet"%>
@@ -34,33 +38,49 @@
       if(select.length > 0){
         Statement statement = db.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         ResultSet data = statement.executeQuery("SELECT * FROM members WHERE ID IN (" + inQuery + ")");
+        
+        List<BeanMember> memberList = new ArrayList<BeanMember>();
+        
+        while(data.next()){
+          BeanMember member = new BeanMember();
+          member.setName(data.getString("NAME"));
+          member.setFirstName(data.getString("FIRSTNAME"));
+          member.setFirstName(data.getString("EMAIL"));
+          member.setTelHome(data.getString("TELHOME"));
+          member.setTelMob(data.getString("TELMOB"));
+          member.setTelPro(data.getString("TELPRO"));
+          member.setAddress(data.getString("ADRESS"));
+          member.setPostalCode(data.getString("POSTALCODE"));
+          member.setPostalCode(data.getString("EMAIL"));
+          memberList.add(member);
+        }
+        
+        db.close();
 
-        if(data.next()){
-          data.beforeFirst();
-          
-          while(data.next()){
+        if(memberList.size() > 0){
+          for(BeanMember mem : memberList){
   %>
             <h2>
               Member 
-              <% out.println(data.getString("FIRSTNAME")); %> 
-              <% out.println(data.getString("NAME")); %>
+              <% out.println(mem.getFirstName()); %> 
+              <% out.println(mem.getName()); %>
             </h2>
             <label>Name</label>
-            <input type="text" name="lastName" value="<% out.println(data.getString("NAME")); %>"/><br/>
+            <input type="text" name="lastName" value="<% out.println(mem.getName()); %>"/><br/>
             <label>First name</label>
-            <input type="text" name="firstName" value="<% out.println(data.getString("FIRSTNAME")); %>"/><br/>
+            <input type="text" name="firstName" value="<% out.println(mem.getFirstName()); %>"/><br/>
             <label>Home phone</label>
-            <input type="text" name="homeNumber" value="<% out.println(data.getString("TELHOME")); %>"/><br/>
+            <input type="text" name="homeNumber" value="<% out.println(mem.getTelHome()); %>"/><br/>
             <label>Mobile phone</label>
-            <input type="text" name="mobileNumber" value="<% out.println(data.getString("TELMOB")); %>"/><br/>
+            <input type="text" name="mobileNumber" value="<% out.println(mem.getTelMob()); %>"/><br/>
             <label>Office number</label>
-            <input type="text" name="officeNumber" value="<% out.println(data.getString("TELPRO")); %>"/><br/>
+            <input type="text" name="officeNumber" value="<% out.println(mem.getTelPro()); %>"/><br/>
             <label>Address</label>
-            <input type="text" name="address" value="<% out.println(data.getString("ADRESS")); %>"/><br/>
+            <input type="text" name="address" value="<% out.println(mem.getAddress()); %>"/><br/>
             <label>Postal code</label>
-            <input type="text" name="postalCode" value="<% out.println(data.getString("POSTALCODE")); %>"/><br/>
+            <input type="text" name="postalCode" value="<% out.println(mem.getPostalCode()); %>"/><br/>
             <label>Email</label>
-            <input type="text" name="city" value="<% out.println(data.getString("EMAIL")); %>"/><br/><br/>
+            <input type="text" name="city" value="<% out.println(mem.getCity()); %>"/><br/><br/>
   <%
           }
         }
@@ -71,15 +91,10 @@
       else{
         session.setAttribute("info", "You must select at least one member");
       }
-      
-      db.close();
     }
     catch(Exception e){
       out.println(e.getMessage());
       session.setAttribute("danger", "Something wrong happened");
-    }
-    finally{
-      //response.sendRedirect("index.jsp");
     }
   %>
 </div>

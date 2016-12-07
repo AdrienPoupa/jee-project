@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -12,3 +13,19 @@
         <h1>JEE project M1</h1>
       </a>
     </header>
+    <div class="error info"><c:out value="${logged}"/></div>
+    <c:if test="${info != null}">
+      <div class="error info"><c:out value="${info}"/></div>
+    </c:if>
+    <c:if test="${danger != null}">
+      <div class="error danger"><c:out value="${danger}"/></div>
+    </c:if>
+    <c:if test="${success != null}">
+      <div class="error success"><c:out value="${success}"/></div>
+    </c:if>
+    <%
+      session.removeAttribute("info");
+      session.removeAttribute("danger");
+      session.removeAttribute("success");
+    %>
+

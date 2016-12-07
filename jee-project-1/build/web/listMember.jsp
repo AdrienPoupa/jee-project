@@ -5,36 +5,54 @@
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="m1.jee.model.BeanMember"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@include file="include/header.jsp" %>
+
 <div id="body">
   <h2>List of members of the Java EE - M1</h2>
-  <%!
+  <%
     ResultSet data;
     Connection db;
-  %>  
-  <%
+    
     String url = "jdbc:derby://localhost:1527/jee-project";
     String user = "login";
     String password = "password";
+    List<BeanMember> memberList = new ArrayList<BeanMember>();
 
     try{
       db = DriverManager.getConnection(url, user, password);
 
       Statement statement = db.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
       data = statement.executeQuery("SELECT * FROM members");
+
+      while(data.next()){
+        BeanMember member = new BeanMember();
+        member.setId(data.getString("ID"));
+        member.setName(data.getString("NAME"));
+        member.setEmail(data.getString("EMAIL"));
+        member.setFirstName(data.getString("FIRSTNAME"));
+        member.setTelHome(data.getString("TELHOME"));
+        member.setTelMob(data.getString("TELMOB"));
+        member.setTelPro(data.getString("TELPRO"));
+        member.setAddress(data.getString("ADRESS"));
+        member.setPostalCode(data.getString("POSTALCODE"));
+        member.setPostalCode(data.getString("EMAIL"));
+        memberList.add(member);
+      }
+      
+      db.close();
     }
     catch(Exception e){
       out.println(e.getMessage());
     }
     
-    if(!data.next()){
+    if(memberList.size() == 0){
   %>
       <div class="error info">The Club has no member!</div>
       <a href="addMember.jsp" class="button">Add new members</a>
   <%
     }
-    
-    data.beforeFirst();
   %>  
           
   <form method="post" action="deleteMember.jsp" name="formMember">    
@@ -49,18 +67,16 @@
       </thead>
       <tbody>
         <%
-            if(data.next()){
-              data.beforeFirst();
-              
-              while(data.next()){
+            if(memberList.size() > 0){
+              for(BeanMember mem : memberList){
         %>
                 <tr>
                   <td class="icon">
-                     <input type="checkbox" name="member" value="<% out.println(data.getString("ID")); %>"/>
+                     <input type="checkbox" name="member" value="<% out.println(mem.getId()); %>"/>
                   </td>
-                  <td class=""><% out.println(data.getString("FIRSTNAME")); %></td>
-                  <td class=""><% out.println(data.getString("NAME")); %></td>
-                  <td class=""><% out.println(data.getString("EMAIL")); %></td>
+                  <td class=""><% out.println(mem.getFirstName()); %></td>
+                  <td class=""><% out.println(mem.getName()); %></td>
+                  <td class=""><% out.println(mem.getEmail()); %></td>
                 </tr>
         <%
               }
@@ -75,17 +91,13 @@
         %>
       </tbody>
     </table>
-    <%
-      data.beforeFirst();
-      
-      if(data.next()) {
+    <%      
+      if(memberList.size() > 0) {
     %>    
       <input onClick="detailMember()" class="button" type="button" value="Details"/>
       <input onClick="deleteMember()" class="button" type="button" value="Delete"/>
     <%
       }
-
-      db.close();
     %>
   </form>  
 </div>

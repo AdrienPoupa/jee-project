@@ -4,7 +4,6 @@
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
-<%@page import="m1.jee.model.BeanMember"%>
 <%
   if(request.getMethod().equals("POST")){
     String url = "jdbc:derby://localhost:1527/jee-project";
@@ -14,15 +13,11 @@
 
     try{
       db = DriverManager.getConnection(url, user, password);
-      
-      BeanMember beanMember = new BeanMember();
-      beanMember.setUsername(request.getParameter("username").toString());
-      beanMember.setPassword(request.getParameter("password").toString());
-      
+
       Statement statement = db.createStatement();
       ResultSet data = statement.executeQuery("SELECT * FROM credentials WHERE login = '" 
-              + beanMember.getUsername() +"' "
-              + "AND mdp = '" + beanMember.getPassword() + "'");
+              + request.getParameter("username").toString() +"' "
+              + "AND mdp = '" + request.getParameter("password").toString() + "'");
 
       if (data.next()) {
         session.setAttribute("logged", true);

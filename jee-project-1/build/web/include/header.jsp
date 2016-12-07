@@ -31,4 +31,9 @@
     <%
       }
     %>
+    <%
+      session.removeAttribute("info");
+      session.removeAttribute("danger");
+      session.removeAttribute("success");
+    %>
 

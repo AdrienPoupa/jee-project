@@ -1,9 +1,16 @@
 package m1.jee.controller;
 
 import java.io.IOException;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,10 +19,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import m1.jee.dao.DBConnection;
+import m1.jee.dao.DBDisconnect;
+import m1.jee.model.BeanMember;
 
 @WebServlet(name = "Controller", urlPatterns = {"/"})
-public class Controller extends HttpServlet {
-
+public class Controller extends HttpServlet {  
+  private static final Map<String, String> ERRORLIST;
+  
+  static {
+    ERRORLIST = new HashMap<>();
+    ERRORLIST.put("MSG_ERROR_LOGIN_PWD", "Login failed! Please check your login and/or password and try again");
+    ERRORLIST.put("MSG_ERROR_LOGIN", "Login failed! Please try later");
+    ERRORLIST.put("MSG_SUCCESS_LOGIN", "You have been successfully logged in!");
+  }
+  
   /**
    * Handles the HTTP <code>GET</code> method.
    * @param request servlet request
@@ -28,15 +45,13 @@ public class Controller extends HttpServlet {
     HttpSession session = request.getSession();
     String url = request.getServletPath();
     
-    DBConnection.getInstance();
-    
     switch(url){
       case "/":
         if(session.getAttribute("logged") != null){
-          loginAction(request, response, session);
-        }
-        else{
           indexAction(request, response, session);
+        }
+        else{ 
+          loginAction(request, response, session);
         }
         break;
 
@@ -110,6 +125,16 @@ public class Controller extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   private void indexAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
+    Connection db = DBConnection.getConnection(getServletContext());
+    List<BeanMember> memberList = new ArrayList<>();
+    
+    try{
+      
+    }
+    catch(Exception e){
+      
+    }
+    
     request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);  
   }
   
@@ -122,7 +147,22 @@ public class Controller extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   private void loginAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+    if(request.getMethod().equals("POST")){      
+      if(getServletContext().getInitParameter("username").equals(request.getParameter("username")) 
+              && getServletContext().getInitParameter("password").equals(request.getParameter("password"))){
+        session.setAttribute("logged", true);
+        session.setAttribute("success", ERRORLIST.get("MSG_SUCCESS_LOGIN"));
+        
+        response.sendRedirect("/");
+      }
+      else{
+        session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_LOGIN_PWD"));
+        request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+      }
+    }
+    else{
+      request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+    }
   }
   
   /**
