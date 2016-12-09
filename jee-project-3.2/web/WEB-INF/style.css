@@ -244,7 +244,7 @@ h2{
 }
 
 a.button,
-input[type="button"].button {
+input[type="submit"].button {
   display: inline-block;
   line-height: 35px;
   margin: 0px 10px 10px 0;
@@ -263,7 +263,7 @@ input[type="button"].button {
   text-decoration: none;
 }
 
-input[type="button"].button{
+input[type="submit"].button{
   border: none;
   cursor:pointer;
 }
@@ -284,4 +284,8 @@ input[type="button"].button{
   margin-bottom: 8px;
   border-radius: 2px;
   outline: none;
+}
+
+footer{
+  margin-top: 10px;
 }

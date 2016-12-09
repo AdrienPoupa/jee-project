@@ -33,8 +33,6 @@
     }
     
     db.close();
-    
-    
   }
   catch(Exception e){
     session.setAttribute("danger", "Something wrong happened");

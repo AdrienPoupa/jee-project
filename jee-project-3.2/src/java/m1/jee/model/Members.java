@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package m1.jee.model;
 
 import java.io.Serializable;
@@ -18,25 +13,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author FABIEN
- */
 @Entity
 @Table(name = "MEMBERS")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Members.findAll", query = "SELECT m FROM Members m")
-  , @NamedQuery(name = "Members.findById", query = "SELECT m FROM Members m WHERE m.id = :id")
-  , @NamedQuery(name = "Members.findByAdress", query = "SELECT m FROM Members m WHERE m.adress = :adress")
-  , @NamedQuery(name = "Members.findByCity", query = "SELECT m FROM Members m WHERE m.city = :city")
-  , @NamedQuery(name = "Members.findByEmail", query = "SELECT m FROM Members m WHERE m.email = :email")
-  , @NamedQuery(name = "Members.findByFirstname", query = "SELECT m FROM Members m WHERE m.firstname = :firstname")
-  , @NamedQuery(name = "Members.findByName", query = "SELECT m FROM Members m WHERE m.name = :name")
-  , @NamedQuery(name = "Members.findByPostalcode", query = "SELECT m FROM Members m WHERE m.postalcode = :postalcode")
-  , @NamedQuery(name = "Members.findByTelhome", query = "SELECT m FROM Members m WHERE m.telhome = :telhome")
-  , @NamedQuery(name = "Members.findByTelmob", query = "SELECT m FROM Members m WHERE m.telmob = :telmob")
-  , @NamedQuery(name = "Members.findByTelpro", query = "SELECT m FROM Members m WHERE m.telpro = :telpro")})
+  @NamedQuery(name = "Members.findAll", query = "SELECT m FROM Members m"),
+  @NamedQuery(name = "Members.findInList", query = "SELECT m FROM Members m WHERE m.id IN :list")})
 public class Members implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -45,36 +27,57 @@ public class Members implements Serializable {
   @Basic(optional = false)
   @Column(name = "ID")
   private Integer id;
+  
   @Size(max = 255)
   @Column(name = "ADRESS")
-  private String adress;
+  private String address;
+  
   @Size(max = 255)
   @Column(name = "CITY")
   private String city;
-  // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+  
   @Size(max = 255)
   @Column(name = "EMAIL")
   private String email;
+  
   @Size(max = 255)
   @Column(name = "FIRSTNAME")
-  private String firstname;
+  private String firstName;
+  
   @Size(max = 255)
   @Column(name = "NAME")
   private String name;
+  
   @Size(max = 255)
   @Column(name = "POSTALCODE")
-  private String postalcode;
+  private String postalCode;
+  
   @Size(max = 255)
   @Column(name = "TELHOME")
-  private String telhome;
+  private String telHome;
+  
   @Size(max = 255)
   @Column(name = "TELMOB")
-  private String telmob;
+  private String telMob;
+  
   @Size(max = 255)
   @Column(name = "TELPRO")
-  private String telpro;
+  private String telPro;
+  
+  public Members(){
+    
+  }
 
-  public Members() {
+  public Members(String name, String firstName, String telHome, String telMob, String telPro, String address, String postalCode, String city, String email) {
+    this.name = name;
+    this.firstName = firstName;
+    this.telHome = telHome;
+    this.telMob = telMob;
+    this.telPro = telPro;
+    this.address = address;
+    this.postalCode = postalCode;
+    this.city = city;
+    this.email = email;    
   }
 
   public Members(Integer id) {
@@ -89,12 +92,12 @@ public class Members implements Serializable {
     this.id = id;
   }
 
-  public String getAdress() {
-    return adress;
+  public String getAddress() {
+    return address;
   }
 
-  public void setAdress(String adress) {
-    this.adress = adress;
+  public void setAddress(String adress) {
+    this.address = adress;
   }
 
   public String getCity() {
@@ -113,12 +116,12 @@ public class Members implements Serializable {
     this.email = email;
   }
 
-  public String getFirstname() {
-    return firstname;
+  public String getFirstName() {
+    return firstName;
   }
 
   public void setFirstname(String firstname) {
-    this.firstname = firstname;
+    this.firstName = firstname;
   }
 
   public String getName() {
@@ -129,36 +132,36 @@ public class Members implements Serializable {
     this.name = name;
   }
 
-  public String getPostalcode() {
-    return postalcode;
+  public String getPostalCode() {
+    return postalCode;
   }
 
-  public void setPostalcode(String postalcode) {
-    this.postalcode = postalcode;
+  public void setPostalCode(String postalcode) {
+    this.postalCode = postalcode;
   }
 
-  public String getTelhome() {
-    return telhome;
+  public String getTelHome() {
+    return telHome;
   }
 
-  public void setTelhome(String telhome) {
-    this.telhome = telhome;
+  public void setTelHome(String telhome) {
+    this.telHome = telhome;
   }
 
-  public String getTelmob() {
-    return telmob;
+  public String getTelMob() {
+    return telMob;
   }
 
-  public void setTelmob(String telmob) {
-    this.telmob = telmob;
+  public void setTelMob(String telmob) {
+    this.telMob = telmob;
   }
 
-  public String getTelpro() {
-    return telpro;
+  public String getTelPro() {
+    return telPro;
   }
 
-  public void setTelpro(String telpro) {
-    this.telpro = telpro;
+  public void setTelPro(String telpro) {
+    this.telPro = telpro;
   }
 
   @Override
@@ -170,15 +173,12 @@ public class Members implements Serializable {
 
   @Override
   public boolean equals(Object object) {
-    // TODO: Warning - this method won't work in the case the id fields are not set
     if (!(object instanceof Members)) {
       return false;
     }
+    
     Members other = (Members) object;
-    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-      return false;
-    }
-    return true;
+    return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
   }
 
   @Override

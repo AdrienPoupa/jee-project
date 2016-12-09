@@ -7,7 +7,7 @@
     <a href="/add" class="button">Add new members</a>
   </c:if>
     
-  <form method="post" action="/delete" name="formMember">    
+  <form method="post" name="formMember">    
     <table class="table" cellpadding="0">
       <thead>
         <tr>
@@ -40,20 +40,9 @@
       </tbody>
     </table>
     <c:if test="${memberList.size() > 0}">
-      <input onClick="detailMember()" class="button" type="button" value="Details"/>
-      <input onClick="deleteMember()" class="button" type="button" value="Delete"/>
+      <input formaction"/see" class="button" type="submit" value="Details"/>
+      <input formaction"/delete" class="button" type="submit" value="Delete"/>
     </c:if>
   </form>
-</div>  
-<script type="text/javascript">
-  function detailMember(){
-    document.formMember.action = "/see";
-    document.formMember.submit();
-  }
-  
-  function deleteMember(){
-    document.formMember.action = "/delete";
-    document.formMember.submit();
-  }
-</script>
+</div>
 <c:import url="include/footer.jsp"></c:import>

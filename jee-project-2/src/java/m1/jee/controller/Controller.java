@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +28,7 @@ import m1.jee.model.BeanMember;
 @WebServlet(name = "Controller", urlPatterns = {"/"})
 public class Controller extends HttpServlet {  
   private static final Map<String, String> ERRORLIST;
+  private static final Logger logger;
   
   static {
     ERRORLIST = new HashMap<>();
@@ -37,6 +40,8 @@ public class Controller extends HttpServlet {
     ERRORLIST.put("MSG_SUCCESS_DELETE_MEMBER", "Selected members have been deleted successfully from the database");
     ERRORLIST.put("MSG_ERROR_SELECT_MEMBER", "You must select at least one member");
     ERRORLIST.put("MSG_ERROR_NO_MEMBER", "No members found");
+    
+    logger = Logger.getLogger(Controller.class.getName());
   }
   
   /**
@@ -156,6 +161,7 @@ public class Controller extends HttpServlet {
       DBDisconnect.disconnect(db);
     }
     catch(SQLException e){
+      logger.log(Level.SEVERE, e.getMessage());
       session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_WRONG"));
     }
     
@@ -218,6 +224,7 @@ public class Controller extends HttpServlet {
       session.setAttribute("success", ERRORLIST.get("MSG_SUCCESS_NEW_MEMBERS"));
     }
     catch(SQLException e){
+      logger.log(Level.SEVERE, e.getMessage());
       session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_WRONG"));
     }
     finally{
@@ -255,6 +262,7 @@ public class Controller extends HttpServlet {
       DBDisconnect.disconnect(db);
     }
     catch(SQLException e){
+      logger.log(Level.SEVERE, e.getMessage());
       session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_WRONG"));
     }
     finally{
@@ -324,6 +332,7 @@ public class Controller extends HttpServlet {
       DBDisconnect.disconnect(db);
     }
     catch(SQLException e){
+      logger.log(Level.SEVERE, e.getMessage());
       session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_WRONG"));
       response.sendRedirect("/");
     }
@@ -355,6 +364,7 @@ public class Controller extends HttpServlet {
       }
     }
     catch(IOException | NullPointerException e){
+      logger.log(Level.SEVERE, e.getMessage());
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
   }

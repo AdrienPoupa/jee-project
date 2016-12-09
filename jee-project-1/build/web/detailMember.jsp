@@ -26,16 +26,16 @@
       String select[] = request.getParameterValues("member");
       String inQuery = "";
       
-      for (int i = 0; i < select.length; i++) {
-        if(i < select.length -1){
-          inQuery += select[i] + ", ";
+      if (select != null && select.length != 0) {
+        for (int i = 0; i < select.length; i++) {
+          if(i < select.length -1){
+            inQuery += select[i] + ", ";
+          }
+          else{
+            inQuery += select[i];
+          }
         }
-        else{
-          inQuery += select[i];
-        }
-      }
-      
-      if(select.length > 0){
+     
         Statement statement = db.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         ResultSet data = statement.executeQuery("SELECT * FROM members WHERE ID IN (" + inQuery + ")");
         
@@ -45,13 +45,13 @@
           BeanMember member = new BeanMember();
           member.setName(data.getString("NAME"));
           member.setFirstName(data.getString("FIRSTNAME"));
-          member.setFirstName(data.getString("EMAIL"));
+          member.setEmail(data.getString("EMAIL"));
           member.setTelHome(data.getString("TELHOME"));
           member.setTelMob(data.getString("TELMOB"));
           member.setTelPro(data.getString("TELPRO"));
           member.setAddress(data.getString("ADRESS"));
           member.setPostalCode(data.getString("POSTALCODE"));
-          member.setPostalCode(data.getString("EMAIL"));
+          member.setCity(data.getString("CITY"));
           memberList.add(member);
         }
         
@@ -87,16 +87,18 @@
           }
         }
         else{
-          session.setAttribute("info", "No members found");
+          session.setAttribute("danger", "No members found");
+          response.sendRedirect("index.jsp");
         }
       }
       else{
-        session.setAttribute("info", "You must select at least one member");
+        session.setAttribute("danger", "You must select at least one member");
+        response.sendRedirect("index.jsp");
       }
     }
     catch(Exception e){
-      out.println(e.getMessage());
       session.setAttribute("danger", "Something wrong happened");
+      response.sendRedirect("index.jsp");
     }
   %>
   <br />

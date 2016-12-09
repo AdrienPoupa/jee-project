@@ -55,7 +55,7 @@
     }
   %>  
           
-  <form method="post" action="deleteMember.jsp" name="formMember">    
+  <form method="post" name="formMember">    
     <table class="table" cellpadding="0">
       <thead>
         <tr>
@@ -94,22 +94,11 @@
     <%      
       if(memberList.size() > 0) {
     %>    
-      <input onClick="detailMember()" class="button" type="button" value="Details"/>
-      <input onClick="deleteMember()" class="button" type="button" value="Delete"/>
+      <input class="button" type="submit" formaction="detailMember.jsp" value="Details"/>
+      <input class="button" type="submit" formaction="deleteMember.jsp" value="Delete"/>
     <%
       }
     %>
   </form>  
 </div>
-<script type="text/javascript">
-  function detailMember(){
-    document.formMember.action = "detailMember.jsp";
-    document.formMember.submit();
-  }
-  
-  function deleteMember(){
-    document.formMember.action = "deleteMember.jsp";
-    document.formMember.submit();
-  }
-</script>
 <%@include file="include/footer.jsp" %>

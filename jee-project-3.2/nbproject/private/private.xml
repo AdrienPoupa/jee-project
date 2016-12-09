@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/FABIEN/Documents/EFREI/M1/JEE/jee-project/jee-project-2/web/WEB-INF/views/see.jsp</file>
-            <file>file:/C:/Users/FABIEN/Documents/EFREI/M1/JEE/jee-project/jee-project-2/src/java/m1/jee/controller/Controller.java</file>
-            <file>file:/C:/Users/FABIEN/Documents/EFREI/M1/JEE/jee-project/jee-project-2/web/WEB-INF/views/index.jsp</file>
+            <file>file:/C:/Users/FABIEN/Documents/EFREI/M1/JEE/jee-project/jee-project-3.2/src/java/m1/jee/controller/Controller.java</file>
+            <file>file:/C:/Users/FABIEN/Documents/EFREI/M1/JEE/jee-project/jee-project-3.2/src/java/m1/jee/model/EMF.java</file>
+            <file>file:/C:/Users/FABIEN/Documents/EFREI/M1/JEE/jee-project/jee-project-3.2/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/FABIEN/Documents/EFREI/M1/JEE/jee-project/jee-project-3.2/src/java/m1/jee/model/Members.java</file>
         </group>
     </open-files>
 </project-private>
