@@ -12,6 +12,12 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 
 public class DBConnection {
+  
+  /**
+   * Use an instance of ServletContext to retrieve db.properties and configure a connection to the database
+   * @param context ServletContext
+   * @return Connection
+   */
   public static Connection getConnection(ServletContext context){
     try{
       Properties prop = new Properties();

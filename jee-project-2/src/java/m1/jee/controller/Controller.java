@@ -40,6 +40,7 @@ public class Controller extends HttpServlet {
     ERRORLIST.put("MSG_SUCCESS_DELETE_MEMBER", "Selected members have been deleted successfully from the database");
     ERRORLIST.put("MSG_ERROR_SELECT_MEMBER", "You must select at least one member");
     ERRORLIST.put("MSG_ERROR_NO_MEMBER", "No members found");
+    ERRORLIST.put("MSG_INFO_NO_MEMBER", "The Club has no member!");
     
     logger = Logger.getLogger(Controller.class.getName());
   }

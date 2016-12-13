@@ -6,6 +6,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DBDisconnect {
+  /**
+   * Close a database connection given in parameter
+   * @param db Connection
+   */
   public static void disconnect(Connection db){
     try {
       if(db != null){

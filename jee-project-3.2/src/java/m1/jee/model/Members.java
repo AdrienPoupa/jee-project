@@ -64,10 +64,25 @@ public class Members implements Serializable {
   @Column(name = "TELPRO")
   private String telPro;
   
+  /**
+   * Default constructor
+   */
   public Members(){
     
   }
 
+  /**
+   * Constructor of a new members
+   * @param name
+   * @param firstName
+   * @param telHome
+   * @param telMob
+   * @param telPro
+   * @param address
+   * @param postalCode
+   * @param city
+   * @param email 
+   */
   public Members(String name, String firstName, String telHome, String telMob, String telPro, String address, String postalCode, String city, String email) {
     this.name = name;
     this.firstName = firstName;
@@ -80,86 +95,170 @@ public class Members implements Serializable {
     this.email = email;    
   }
 
+  /**
+   * Constructor with only primary key parameter
+   * @param id Integer
+   */
   public Members(Integer id) {
     this.id = id;
   }
 
+  /**
+   * Get primary key
+   * @return Integer
+   */
   public Integer getId() {
     return id;
   }
 
+  /**
+   * Set primary key
+   * @param id Integer
+   */
   public void setId(Integer id) {
     this.id = id;
   }
 
+  /**
+   * Get address
+   * @return String
+   */
   public String getAddress() {
     return address;
   }
 
+  /**
+   * Set address
+   * @param adress String
+   */
   public void setAddress(String adress) {
     this.address = adress;
   }
 
+  /**
+   * Get city
+   * @return String
+   */
   public String getCity() {
     return city;
   }
 
+  /**
+   * Set city
+   * @param city String
+   */
   public void setCity(String city) {
     this.city = city;
   }
 
+  /**
+   * Get email
+   * @return String
+   */
   public String getEmail() {
     return email;
   }
 
+  /**
+   * Set email
+   * @param email String
+   */
   public void setEmail(String email) {
     this.email = email;
   }
 
+  /**
+   * Get firstname
+   * @return String
+   */
   public String getFirstName() {
     return firstName;
   }
 
+  /**
+   * Set firstname
+   * @param firstname 
+   */
   public void setFirstname(String firstname) {
     this.firstName = firstname;
   }
 
+  /**
+   * Get name
+   * @return String
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Set name
+   * @param name String
+   */
   public void setName(String name) {
     this.name = name;
   }
 
+  /**
+   * Get postal code
+   * @return String
+   */
   public String getPostalCode() {
     return postalCode;
   }
 
+  /**
+   * Set postal code
+   * @param postalcode String
+   */
   public void setPostalCode(String postalcode) {
     this.postalCode = postalcode;
   }
 
+  /**
+   * Get telephone home
+   * @return String
+   */
   public String getTelHome() {
     return telHome;
   }
 
+  /**
+   * Set telephone home
+   * @param telhome 
+   */
   public void setTelHome(String telhome) {
     this.telHome = telhome;
   }
 
+  /**
+   * Get mobile phone
+   * @return String
+   */
   public String getTelMob() {
     return telMob;
   }
 
+  /**
+   * Set mobile phone
+   * @param telmob String
+   */
   public void setTelMob(String telmob) {
     this.telMob = telmob;
   }
 
+  /**
+   * Get professional phone
+   * @return String
+   */
   public String getTelPro() {
     return telPro;
   }
 
+  /**
+   * set professional phone
+   * @param telpro 
+   */
   public void setTelPro(String telpro) {
     this.telPro = telpro;
   }

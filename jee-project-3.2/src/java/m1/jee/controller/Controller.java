@@ -23,7 +23,8 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 @WebServlet(name = "Controller", urlPatterns = {"/"})
-public class Controller extends HttpServlet {  
+public class Controller extends HttpServlet {
+  
   private static final Map<String, String> ERRORLIST;
   private static final Logger logger;
   private EntityManager em;
@@ -38,6 +39,7 @@ public class Controller extends HttpServlet {
     ERRORLIST.put("MSG_SUCCESS_DELETE_MEMBER", "Selected members have been deleted successfully from the database");
     ERRORLIST.put("MSG_ERROR_SELECT_MEMBER", "You must select at least one member");
     ERRORLIST.put("MSG_ERROR_NO_MEMBER", "No members found");
+    ERRORLIST.put("MSG_INFO_NO_MEMBER", "The Club has no member!");
     
     logger = Logger.getLogger(Controller.class.getName());
   }
@@ -157,6 +159,10 @@ public class Controller extends HttpServlet {
       Collection<Members> memberList = em.createNamedQuery("Members.findAll", Members.class).getResultList();
       request.setAttribute("memberList", memberList);
       request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
+      
+      if(memberList.isEmpty()){
+        session.setAttribute("success", ERRORLIST.get("MSG_INFO_NO_MEMBER"));
+      }
     }
     catch(PersistenceException e){
       logger.log(Level.SEVERE, e.getMessage());
@@ -255,7 +261,6 @@ public class Controller extends HttpServlet {
   private void seeAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
     try{
       String select[] = request.getParameterValues("member");
-      String inQuery = "";  
       
       if(select != null && select.length > 0){
         TypedQuery<Members> query = em.createNamedQuery("Members.findInList", Members.class).setParameter("list", Arrays.asList(select));
@@ -292,7 +297,7 @@ public class Controller extends HttpServlet {
   }
   
   /**
-   * Display file stream or return 404
+   * Display file stream or return 404 if file does not exist
    * @param response servlet response
    * @throws IOException if an I/O error occurs
    */
@@ -314,6 +319,7 @@ public class Controller extends HttpServlet {
   
   /**
    * Add five new users
+   * @return void
    */
   private void createFiveMembers(){
     em.getTransaction().begin();
