@@ -161,7 +161,7 @@ public class Controller extends HttpServlet {
       request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
       
       if(memberList.isEmpty()){
-        session.setAttribute("success", ERRORLIST.get("MSG_INFO_NO_MEMBER"));
+        session.setAttribute("info", ERRORLIST.get("MSG_INFO_NO_MEMBER"));
       }
     }
     catch(PersistenceException e){
@@ -235,9 +235,7 @@ public class Controller extends HttpServlet {
         Members member = em.find(Members.class, Integer.parseInt(selected.trim()));
 
         if(member != null){
-          em.getTransaction().begin();
           em.remove(member);
-          em.getTransaction().commit();
         }
       }
 
@@ -309,7 +307,7 @@ public class Controller extends HttpServlet {
       byte[] buffer = new byte[10240];
 
       for (int length = 0; (length = is.read(buffer)) > 0;) {
-          output.write(buffer, 0, length);
+        output.write(buffer, 0, length);
       }
     }
     catch(IOException | NullPointerException e){
@@ -322,14 +320,12 @@ public class Controller extends HttpServlet {
    * @return void
    */
   private void createFiveMembers(){
-    em.getTransaction().begin();
     createMember("Simpson","Homer","0123456789","0612345678","0698765432","2 avenue Duff","92700","Colombes","hsimpson@gmail.com");
     createMember("Simpson","Bart","0145362787","0645362718","0611563477","10 rue des Rebelles","92270","Bois-colombes","bsimpson@gmail.com");
     createMember("Lagaffe","Gaston","0187665987","0623334256","0654778654","65 rue de la Paresse","92700","Colombes","glagaffe@yahoo.fr");
     createMember("Mafalda","Querida","0187611987","0783334256","0658878654","6 rue de Buenos Aires","75016","Paris","qmafalda@hotmail.ar");
     createMember("Woodpecker","Woody","0187384987","0622494256","0674178654","5 bvd des Picoreurs","21000","Dijon","woody@mail.co.uk");
     createMember("Brown","Charlie","0122456678","0699854673","0623445166","140 avenue Foche","90000","Nanterre","cbrown@live.com");
-    em.getTransaction().commit();
   }
   
   /**

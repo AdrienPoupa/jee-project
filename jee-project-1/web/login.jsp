@@ -1,3 +1,4 @@
+<%@page import="java.sql.SQLException"%>
 <%@page import="java.io.PrintWriter"%>
 <%@page import="java.io.StringWriter"%>
 <%@page import="java.sql.ResultSet"%>
@@ -28,7 +29,7 @@
       
       db.close();
     }
-    catch(Exception e){
+    catch(SQLException e){
       out.println(e.getMessage());
     }
     finally{

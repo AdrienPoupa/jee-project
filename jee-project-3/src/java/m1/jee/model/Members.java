@@ -263,6 +263,10 @@ public class Members implements Serializable {
     this.telPro = telpro;
   }
 
+  /**
+   * Get hash code
+   * @return int
+   */
   @Override
   public int hashCode() {
     int hash = 0;
@@ -270,6 +274,11 @@ public class Members implements Serializable {
     return hash;
   }
 
+  /**
+   * Equals method
+   * @param object Object
+   * @return 
+   */
   @Override
   public boolean equals(Object object) {
     if (!(object instanceof Members)) {
@@ -280,6 +289,10 @@ public class Members implements Serializable {
     return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
   }
 
+  /**
+   * To String method
+   * @return 
+   */
   @Override
   public String toString() {
     return "m1.jee.model.Members[ id=" + id + " ]";

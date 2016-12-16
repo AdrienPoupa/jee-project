@@ -115,7 +115,7 @@ header a{
 }
 
 .error{
-    width: 600px;
+    width: 900px;
     margin: auto;
     padding: 6px;
     margin-bottom: 12px;
@@ -244,7 +244,7 @@ h2{
 }
 
 a.button,
-input[type="button"].button {
+input[type="submit"].button {
   display: inline-block;
   line-height: 35px;
   margin: 0px 10px 10px 0;
@@ -263,7 +263,7 @@ input[type="button"].button {
   text-decoration: none;
 }
 
-input[type="button"].button{
+input[type="submit"].button{
   border: none;
   cursor:pointer;
 }

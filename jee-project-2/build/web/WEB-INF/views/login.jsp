@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:import url="include/header.jsp"></c:import>
 <div class="login">
   <div class="title">

@@ -1,3 +1,4 @@
+<%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
@@ -34,7 +35,7 @@
     
     db.close();
   }
-  catch(Exception e){
+  catch(SQLException e){
     session.setAttribute("danger", "Something wrong happened");
   }
   finally{

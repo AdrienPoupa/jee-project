@@ -1,3 +1,4 @@
+<%@page import="java.sql.SQLException"%>
 <%@page import="m1.jee.model.BeanMember"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -24,15 +25,15 @@
     try{
       db = DriverManager.getConnection(url, user, password);
       String select[] = request.getParameterValues("member");
-      String inQuery = "";
+      StringBuilder inQuery = new StringBuilder();
       
       if (select != null && select.length != 0) {
         for (int i = 0; i < select.length; i++) {
           if(i < select.length -1){
-            inQuery += select[i] + ", ";
+            inQuery.append(select[i]).append(", ");
           }
           else{
-            inQuery += select[i];
+            inQuery.append(select[i]);
           }
         }
      
@@ -80,7 +81,7 @@
             <label>Postal code</label>
             <input type="text" name="postalCode" value="<% out.println(mem.getPostalCode()); %>"/><br/>
             <label>City</label>
-            <input type="text" name="city" value="<% out.println(mem.getCity()); %>"/><br/><br/>
+            <input type="text" name="city" value="<% out.println(mem.getCity()); %>"/><br/>
             <label>Email</label>
             <input type="text" name="email" value="<% out.println(mem.getEmail()); %>"/><br/><br/>
   <%
@@ -96,7 +97,7 @@
         response.sendRedirect("index.jsp");
       }
     }
-    catch(Exception e){
+    catch(SQLException e){
       session.setAttribute("danger", "Something wrong happened");
       response.sendRedirect("index.jsp");
     }

@@ -3,7 +3,6 @@
 <div id="body">
   <h2>List of members of the Java EE - M1</h2>
   <c:if test="${memberList.size() == 0}">
-    <div class="error info">The Club has no member!</div>
     <a href="/add" class="button">Add new members</a>
   </c:if>
     
@@ -40,8 +39,8 @@
       </tbody>
     </table>
     <c:if test="${memberList.size() > 0}">
-      <input formaction"/see" class="button" type="submit" value="Details"/>
-      <input formaction"/delete" class="button" type="submit" value="Delete"/>
+      <input formaction="/see" class="button" type="submit" value="Details"/>
+      <input formaction="/delete" class="button" type="submit" value="Delete"/>
     </c:if>
   </form>
 </div>

@@ -166,6 +166,10 @@ public class Controller extends HttpServlet {
       session.setAttribute("danger", ERRORLIST.get("MSG_ERROR_WRONG"));
     }
     
+    if(memberList.isEmpty()){
+      session.setAttribute("info", ERRORLIST.get("MSG_INFO_NO_MEMBER"));
+    }
+    
     request.setAttribute("memberList", memberList);
     request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);  
   }
@@ -284,15 +288,15 @@ public class Controller extends HttpServlet {
       Connection db = DBConnection.getConnection(getServletContext());
       
       String select[] = request.getParameterValues("member");
-      String inQuery = "";  
+      StringBuilder inQuery = new StringBuilder();
       
       if(select != null && select.length > 0){
         for (int i = 0; i < select.length; i++) {
           if(i < select.length -1){
-            inQuery += select[i] + ", ";
+            inQuery.append(select[i]).append(", ");
           }
           else{
-            inQuery += select[i];
+            inQuery.append(select[i]);
           }
         }
         
